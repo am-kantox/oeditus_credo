@@ -2,7 +2,7 @@ defmodule OeditusCredo.MixProject do
   use Mix.Project
 
   @version "0.1.0"
-  @source_url "https://github.com/oeditus/oeditus_credo"
+  @source_url "https://github.com/am-kantox/oeditus_credo"
   @homepage_url "https://oeditus.com"
 
   def project do
@@ -101,7 +101,7 @@ defmodule OeditusCredo.MixProject do
       homepage_url: @homepage_url,
       formatters: ["html"],
       groups_for_modules: groups_for_modules(),
-      nest_modules_by_prefix: [OeditusCredo.Check],
+      nest_modules_by_prefix: [OeditusCredo.Check.Warning],
       before_closing_body_tag: &before_closing_body_tag/1,
       authors: ["Oeditus Team"],
       canonical: "https://hexdocs.pm/oeditus_credo",
