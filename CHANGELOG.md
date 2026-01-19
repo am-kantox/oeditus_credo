@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Standalone Escript** - Build standalone executable with `mix escript.build`
+- **Hex Archive Support** - Install globally with `mix archive.install`
+- **Mix Task** - `mix oeditus_credo` command with all checks pre-enabled
+- **CLI Module** - Automatic configuration generation
+- STANDALONE.md guide with detailed installation and usage instructions
+- CI/CD integration examples for GitHub Actions and GitLab CI
+
+### Changed
+- Updated README with standalone installation options
+- Added escript configuration to mix.exs
+
 ## [0.1.0] - 2026-01-18
 
 ### Added

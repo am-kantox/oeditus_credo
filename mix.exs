@@ -16,6 +16,7 @@ defmodule OeditusCredo.MixProject do
       description: description(),
       package: package(),
       docs: docs(),
+      escript: escript(),
       test_coverage: [tool: ExCoveralls],
       dialyzer: [
         plt_add_apps: [:mix, :credo],
@@ -29,7 +30,18 @@ defmodule OeditusCredo.MixProject do
   end
 
   def application do
-    []
+    [
+      extra_applications: [:logger]
+    ]
+  end
+
+  defp escript do
+    [
+      main_module: OeditusCredo.Escript,
+      name: "oeditus_credo",
+      embed_elixir: true,
+      app: nil
+    ]
   end
 
   def cli do
@@ -75,6 +87,7 @@ defmodule OeditusCredo.MixProject do
         .formatter.exs
         mix.exs
         README.md
+        STANDALONE.md
         LICENSE
         CHANGELOG.md
       ),
@@ -112,6 +125,8 @@ defmodule OeditusCredo.MixProject do
   defp extras do
     [
       "README.md",
+      "QUICKSTART.md": [title: "Quick Start"],
+      "STANDALONE.md": [title: "Standalone Usage"],
       "CHANGELOG.md": [title: "Changelog"],
       "stuff/docs/Automated Detection of Common Elixir Phoenix Mistakes.md": [
         filename: "automated_detection",

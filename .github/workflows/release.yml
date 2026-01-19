@@ -1,0 +1,107 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Release Artifacts
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: '1.15'
+          otp-version: '26'
+
+      - name: Restore dependencies cache
+        uses: actions/cache@v4
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - name: Build escript
+        run: MIX_ENV=prod mix escript.build
+
+      - name: Build hex archive
+        run: MIX_ENV=prod mix archive.build
+
+      - name: Get version
+        id: version
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          else
+            echo "version=$(grep '@version' mix.exs | sed 's/.*"\(.*\)".*/\1/')" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create checksums
+        run: |
+          sha256sum oeditus_credo > oeditus_credo.sha256
+          sha256sum oeditus_credo-*.ez > oeditus_credo-archive.sha256
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            oeditus_credo
+            oeditus_credo-*.ez
+            oeditus_credo.sha256
+            oeditus_credo-archive.sha256
+          body: |
+            ## OeditusCredo Release ${{ steps.version.outputs.version }}
+            
+            ### Installation
+            
+            **Escript (standalone executable):**
+            ```bash
+            curl -L https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/oeditus_credo -o oeditus_credo
+            chmod +x oeditus_credo
+            sudo mv oeditus_credo /usr/local/bin/
+            ```
+            
+            **Hex Archive (Mix task):**
+            ```bash
+            mix archive.install https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/oeditus_credo-${{ steps.version.outputs.version }}.ez
+            ```
+            
+            **From Hex.pm:**
+            ```bash
+            mix archive.install hex oeditus_credo
+            ```
+            
+            ### Checksums
+            
+            Verify your downloads:
+            ```bash
+            sha256sum -c oeditus_credo.sha256
+            sha256sum -c oeditus_credo-archive.sha256
+            ```
+            
+            See [STANDALONE.md](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/STANDALONE.md) for detailed usage instructions.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to Hex.pm
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
+        run: |
+          mix hex.publish --yes || echo "Hex publish skipped (may need HEX_API_KEY secret)"

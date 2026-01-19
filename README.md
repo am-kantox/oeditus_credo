@@ -38,6 +38,8 @@ OeditusCredo provides 20 comprehensive custom Credo checks that detect common mi
 
 ## Installation
 
+### As a Project Dependency
+
 Add `oeditus_credo` to your list of dependencies in `mix.exs`:
 
 ```elixir
@@ -48,7 +50,34 @@ def deps do
 end
 ```
 
+### Standalone Installation (No Dependency Required)
+
+You can also use OeditusCredo without adding it to your project dependencies:
+
+```bash
+# Install as a Hex archive (recommended for development)
+mix archive.install hex oeditus_credo
+
+# Or download and use the escript executable (best for CI/CD)
+curl -L https://github.com/am-kantox/oeditus_credo/releases/latest/download/oeditus_credo -o oeditus_credo
+chmod +x oeditus_credo
+```
+
+See [STANDALONE.md](STANDALONE.md) for detailed standalone usage instructions.
+
 ## Usage
+
+### With Standalone Installation
+
+If you installed OeditusCredo as an archive or escript:
+
+```bash
+mix oeditus_credo              # Run with all checks enabled
+mix oeditus_credo --strict     # Fail on any issues
+mix oeditus_credo lib/my_app   # Analyze specific directory
+```
+
+### With Project Dependency
 
 Add the checks to your `.credo.exs` configuration:
 
