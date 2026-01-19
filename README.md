@@ -59,7 +59,7 @@ You can also use OeditusCredo without adding it to your project dependencies:
 mix archive.install hex oeditus_credo
 
 # Or download and use the escript executable (best for CI/CD)
-curl -L https://github.com/am-kantox/oeditus_credo/releases/latest/download/oeditus_credo -o oeditus_credo
+curl -L https://github.com/Oeditus/oeditus_credo/releases/latest/download/oeditus_credo -o oeditus_credo
 chmod +x oeditus_credo
 ```
 

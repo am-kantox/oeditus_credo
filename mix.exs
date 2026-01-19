@@ -2,7 +2,7 @@ defmodule OeditusCredo.MixProject do
   use Mix.Project
 
   @version "0.2.0"
-  @source_url "https://github.com/am-kantox/oeditus_credo"
+  @source_url "https://github.com/Oeditus/oeditus_credo"
   @homepage_url "https://oeditus.com"
 
   def project do

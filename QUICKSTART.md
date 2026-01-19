@@ -62,7 +62,7 @@ script:
 
 ```bash
 # Download
-curl -LO https://github.com/am-kantox/oeditus_credo/releases/latest/download/oeditus_credo
+curl -LO https://github.com/Oeditus/oeditus_credo/releases/latest/download/oeditus_credo
 chmod +x oeditus_credo
 
 # Run
